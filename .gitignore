@@ -3,6 +3,6 @@
 __pycache__
 myvenv
 .vscode
-db.sqlite3
+book_summary_site/db.sqlite3
 /static
 .DS_Store
