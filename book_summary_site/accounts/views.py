@@ -1,6 +1,9 @@
 from django.contrib.auth import login
 from django.shortcuts import render,redirect
-from .forms import ProfileForm,UserCreateForm
+from .forms import ProfileForm,UserCreateForm,LoginForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView,LogoutView
+from django.views import generic
 
 
 def regist_user(request):
@@ -28,3 +31,11 @@ def regist_user(request):
     }
 
     return render(request,'accounts/regist.html',context)
+
+
+class Login(LoginView):
+    form_class = LoginForm
+    template_name = 'accounts/login.html'
+
+class Logout(LoginRequiredMixin,LogoutView):
+    template_name = 'accounts/logout.html'
