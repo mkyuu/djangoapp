@@ -14,13 +14,13 @@ class BookListView(generic.ListView):
     model = Book
     template_name = 'book_summary/book_list.html'
 
-class BookAddView(generic.CreateView):
+class BookAddView(LoginRequiredMixin,generic.CreateView):
     model = Book
     form_class = BookCreateForm
     success_url = reverse_lazy('book_summary:book_list')
     template_name = 'book_summary/book_form.html'
 
-class BookUpdateView(generic.UpdateView):
+class BookUpdateView(LoginRequiredMixin,generic.UpdateView):
     model = Book
     form_class = BookCreateForm
     template_name = 'book_summary/book_form.html'
@@ -29,7 +29,7 @@ class BookUpdateView(generic.UpdateView):
         return redirect('book_summary:book_detail',kwargs={'pk':self.kwargs['pk']}) 
         #　pkを取得して元のdetailに遷移
 
-class BookDetailView(generic.DetailView):
+class BookDetailView(LoginRequiredMixin,generic.DetailView):
     model = Book
     template_name = 'book_summary/book_detail.html'
 
@@ -38,12 +38,12 @@ class BookDetailView(generic.DetailView):
         context['form'] = CommentCreateForm
         return context
 
-class BookDeleteView(generic.DeleteView):
+class BookDeleteView(LoginRequiredMixin,generic.DeleteView):
     model = Book
     template_name = 'book_summary/book_delete.html'
     success_url = reverse_lazy('book_summary:book_list')
 
-class CommentView(generic.CreateView):
+class CommentView(LoginRequiredMixin,generic.CreateView):
     model = Comment
     form_class = CommentCreateForm
     template_name = 'book_summary/book_detail.html'
@@ -55,7 +55,7 @@ class CommentView(generic.CreateView):
         comment = form.save()
         return redirect('book_summary:book_detail',pk=book_pk)
 
-class CommentDeleteView(generic.DeleteView):
+class CommentDeleteView(LoginRequiredMixin,generic.DeleteView):
     model = Comment
     template_name = 'book_summary/comment_delete.html'
 

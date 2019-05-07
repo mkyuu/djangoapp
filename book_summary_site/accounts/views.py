@@ -27,4 +27,4 @@ def regist_user(request):
         'profile_form': profile_form,
     }
 
-    return render(request,'accounts:regist.html',context)
+    return render(request,'accounts/regist.html',context)

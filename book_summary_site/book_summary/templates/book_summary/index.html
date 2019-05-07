@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'book_summary:book_add' %}">本の投稿フォームへ</a>
+<a href="{% url 'book_summary:book_list' %}">本のリストへ</a>
+<a href="{% url 'accounts:regist' %}">新規登録</a>
+{% endblock %}
