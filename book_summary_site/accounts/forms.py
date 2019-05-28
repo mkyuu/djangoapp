@@ -1,18 +1,11 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import (AuthenticationForm,UserCreationForm,PasswordChangeForm,
+PasswordResetForm,SetPasswordForm)
+from django.contrib.auth import get_user_model
 
 
-class UserCreateForm(UserCreationForm):
-    pass
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = (
-            "name","gender","birthday","email"
-        )
+User = get_user_model()
 
 class LoginForm(AuthenticationForm):
 
@@ -21,3 +14,78 @@ class LoginForm(AuthenticationForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = field.label
+
+
+class UserCreateForm(UserCreationForm):
+    """ユーザー登録用フォーム"""
+
+    class Meta:
+        model = User
+        fields = ('email','name')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        User.objects.filter(email=email, is_active=False).delete()
+        return email
+
+
+class UserUpdateForm(forms.ModelForm):
+    """ユーザー情報更新フォーム"""
+
+    class Meta:
+        model = User
+        fields = ('name','profile')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """パスワード変更時のフォーム"""
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class MyPasswordResetForm(PasswordResetForm):
+    """パスワードを忘れたときのフォーム"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class MySetPasswordForm(SetPasswordForm):
+    """パスワード再設定用フォーム"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class EmailChangeForm(forms.ModelForm):
+    """メールアドレス変更フォーム"""
+
+    class Meta:
+        model = User
+        fields = ('email',)
+    
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        User.objects.filter(email=email, is_active=False).delete()
+        return email

@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Book Summary Site</title>
   </head>
@@ -19,25 +19,72 @@
               
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                       <a class="nav-link" href="{% url 'book_summary:index' %}">Top Page <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="{% url 'book_summary:book_list' %}">BookList</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                      <a class="nav-link disabled" href="{% url 'book_summary:book_add' %}">本の投稿フォーム</a>
+                      <a class="nav-link" href="{% url 'book_summary:book_add' %}">本の投稿フォーム</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'accounts:user_detail' user.pk %}">マイページ</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'accounts:user_create' %}">新規登録</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a>
+                    </li>
+                    {% endif %}
                   </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                  <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'book_summary:book_list' %}">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="keyword">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                   </form>
                 </div>
               </nav>
-    {% block content %}
-    {% endblock %}
-
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <ul class="list-group">
+              <li class="list-group-item">ジャンル</li>
+              {% for bigcategory in bigcategory_list %}
+                <li class="list-group-item"><a href="{% url 'book_summary:bigcategory' bigcategory.pk %}">{{bigcategory}}</a></li>
+              {% for category in bigcategory.category_set.all %}
+              <li class="list-group-item"><a href="{% url 'book_summary:category' category.pk %}">{{category}}</a></li>
+              {% endfor %}
+              {% endfor %}
+            </ul>
+            <ul class="list-group">
+              <li class="list-group-item">出版社</li>
+              {% for publisher in publisher_list %}
+              <li class="list-group-item"><a href="{% url 'book_summary:publisher' publisher.pk %}">{{publisher}}</a></li>
+              {% endfor %}
+            </ul>
+            <ul class="list-group">
+              <li class="list-group-item">著者</li>
+              {% for author in author_list %}
+              <li class="list-group-item"><a href="{% url 'book_summary:author' author.pk %}">{{author}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+         
+          <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+  
+    
+            
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<p>{{book.title}}を削除しました。</p>
+<a href="{% url 'book_summary:index' %}">Toppageへ戻る</a>
 {% endblock %}

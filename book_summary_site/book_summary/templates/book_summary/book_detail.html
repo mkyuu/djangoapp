@@ -1,4 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
+<table>
+        <tr><td>{{book.title}}</td>
+            <td><a href="{% url 'book_summary:book_update' book.pk %}">編集</a></td>
+            <td><a href="{% url 'book_summary:book_delete' book.pk %}">削除</a></td></tr>
+        <td>{{book.summary}}</td>
+        <td>{{book.link}}</td>
+        <td>{{book.img}}</td>
+        <td>{{book.published_date}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.publisher}}</td>
+        <tr>{{book.bigcategory}}</tr>
+        <td>{{book.category}}</td>
+</table>
+<form action="{% url 'book_summary:comment' book.pk %}" method="POST">
+    {{form.non_field_errors}}
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{field.id_for_label}}">{{field.label_tag}}</label>
+        {{field}}
+        {{field.errors}}
+    </div>
+    {% endfor %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-dark">送信</button>
+</form>
+{% for comment in book.comment_set.all %}
+<p>
+    {{comment.title}}<br>
+    {{comment.comment|linebreaksbr}}<br>
 
+    {% if user.is_authenticated %}
+    <form action="{% url 'book_summary:comment_delete' comment.pk %}" method="POST">
+        <button type="submit">このコメントを削除</button>
+        {% csrf_token %}
+    </form>
+    {% endif %}
+</p>
+{% endfor %}
+{% include 'book_summary/page.html' %}
 {% endblock %}
