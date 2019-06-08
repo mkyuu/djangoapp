@@ -1,11 +1,3 @@
 {% extends 'base.html' %}
-{% block content %}
-<a href="{% url 'book_summary:book_list' %}">本のリストへ</a>
-{% if user.is_authenticated %}
-<a href="{% url 'book_summary:book_add' %}">本の投稿フォームへ</a>
-<a href="{% url 'accounts:logout' %}">ログアウト</a>
-{% else %}
-<a href="{% url 'accounts:login' %}">ログイン</a>
-<a href="{% url 'accounts:user_create' %}">新規登録</a>
-{% endif %}
+
 {% endblock %}

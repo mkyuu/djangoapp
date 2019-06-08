@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 
+def set_default_topcategory():
+    topcategory,_ = TopCategory.objects.get_or_create(name='None')
+
 def set_default_bigcategory():
     bigcategory, _ = BigCategory.objects.get_or_create(name='None')
     return bigcategory.pk
@@ -19,10 +22,14 @@ def set_default_publisher():
     publisher, _ = Publisher.objects.get_or_create(name='None')
     return publisher.pk
 
+class TopCategory(models.Model):
+    name = models.CharField('トップカテゴリ名',max_length=100)
 
+    def __str__(self):
+        return self.name
 class BigCategory(models.Model):
     name = models.CharField('カテゴリ名',max_length=100)
-
+    topcategory = models.ForeignKey(TopCategory,on_delete=models.SET_DEFAULT,default=set_default_topcategory,verbose_name='トップカテゴリ名')
     def __str__(self):
         return self.name
 
