@@ -116,6 +116,3 @@ class AuthorView(generic.ListView):
         queryset = Book.objects.order_by('-published_date').filter(author=author)
         return queryset
 
-class GoodBookView(generic.DetailView):
-    model = Good
-    template_name = 'book_summary/good_book'

@@ -17,7 +17,7 @@ urlpatterns = [
     path('category2/<int:pk>/',views.CategoryView.as_view(),name='category'),
     path('publisher/<int:pk>/',views.PublisherView.as_view(),name='publisher'),
     path('author/<int:pk>/',views.AuthorView.as_view(),name='author'),
-    path('good/book/<int:pk>/',views.GoodBookView.as_view(),name='good_book'),
-    path('good/user/<int:pk>/',views.GoodUserView.as_view(),name='good_user'),
+    #path('good/book/<int:pk>/',views.GoodBookView.as_view(),name='good_book'),
+    #path('good/user/<int:pk>/',views.GoodUserView.as_view(),name='good_user'),
 
 ]
