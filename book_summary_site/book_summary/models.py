@@ -5,6 +5,7 @@ from django.utils import timezone
 
 def set_default_topcategory():
     topcategory,_ = TopCategory.objects.get_or_create(name='None')
+    return topcategory.pk
 
 def set_default_bigcategory():
     bigcategory, _ = BigCategory.objects.get_or_create(name='None')
@@ -60,9 +61,8 @@ class Book(models.Model):
     summary = models.TextField('要約')
     img = models.URLField('画像url',blank=True)
     link = models.URLField('Amazonリンク',blank=True)
-    published_date = models.DateTimeField('公開日',blank=True,auto_now_add=timezone.now())
-    bigcategory = models.ForeignKey(BigCategory,on_delete=models.SET_DEFAULT,default=set_default_bigcategory,blank=True)
-    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT,default=set_default_category,blank=True,verbose_name='ジャンル')
+    published_date = models.DateTimeField('公開日',auto_now=True)
+    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT,default=set_default_category,blank=True,null=True,verbose_name='ジャンル')
     publisher = models.ForeignKey(Publisher,on_delete=models.SET_DEFAULT,default=set_default_publisher,blank=True,verbose_name='出版社')
     author = models.ForeignKey(Author,on_delete=models.SET_DEFAULT,default=set_default_author,blank=True)
         
@@ -75,7 +75,7 @@ class Comment(models.Model):
     author = models.ForeignKey(get_user_model(),on_delete=models.SET_NULL,null=True)
     title = models.CharField(verbose_name='投稿者',max_length=200,blank=True,default='名無しさん')
     comment = models.TextField(verbose_name='コメント')
-    published_date = models.DateTimeField(verbose_name='公開日',auto_now_add=timezone.now())
+    published_date = models.DateTimeField(verbose_name='公開日',auto_now=True)
     book = models.ForeignKey(Book,on_delete=models.SET_NULL,null=True)
     
     def __str__(self):

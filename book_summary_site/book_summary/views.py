@@ -1,24 +1,23 @@
 from django.shortcuts import get_object_or_404,redirect
 from django.views import generic
 from .forms import BookCreateForm,CommentCreateForm
-from .models import BigCategory,Category,Author,Publisher,Comment,Book
+from .models import TopCategory,BigCategory,Category,Author,Publisher,Comment,Book
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 app_name = 'book_summary'
 
-class IndexView(generic.TemplateView):
-    template_name = 'book_summary/index.html'
-
-
+'''get_context_dataメソッドはテンプレートへ渡す辞書を作成するメソッドで、
+ほとんどのクラスベースビューがこのメソッドを持っています。
+辞書をカスタマイズしたい場合、テンプレートに渡す変数を増やしたい場合に上書きすることがあります。'''
 class BookListView(generic.ListView):
     model = Book
     template_name = 'book_summary/book_list.html'
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = Book.objects.order_by('-published_date')
+        queryset = Book.objects.order_by('published_date')
         keyword = self.request.GET.get('keyword')
         if keyword:
             queryset = queryset.filter(
@@ -76,6 +75,14 @@ class CommentDeleteView(LoginRequiredMixin,generic.DeleteView):
         comment = get_object_or_404(Comment,pk=self.kwargs['pk'])
         return redirect('book_summary:book_detail',pk=comment.book.pk)
 
+class TopCategoryView(generic.ListView):
+    model = Book
+    paginate_by = 10
+
+    def get_queryset(self):
+        topcategory = get_object_or_404(TopCategory,pk=self.kwargs['pk'])
+        queryset = Book.objects.order_by('-published_date').filter(category__bigcategory__topcategory=topcategory)
+        return queryset
 
 class BigCategoryView(generic.ListView):
     model = Book
@@ -83,7 +90,7 @@ class BigCategoryView(generic.ListView):
 
     def get_queryset(self):
         bigcategory = get_object_or_404(BigCategory,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('-published_date').filter(bigcategory=bigcategory)
+        queryset = Book.objects.order_by('published_date').filter(category__bigcategory=bigcategory)
         return queryset
 
 
@@ -93,7 +100,7 @@ class CategoryView(generic.ListView):
 
     def get_queryset(self):
         category = get_object_or_404(Category,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('-published_date').filter(category=category)
+        queryset = Book.objects.order_by('published_date').filter(category=category)
         return queryset
 
 
@@ -103,7 +110,7 @@ class PublisherView(generic.ListView):
 
     def get_queryset(self):
         publisher = get_object_or_404(Publisher,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('-published_date').filter(publisher=publisher)
+        queryset = Book.objects.order_by('published_date').filter(publisher=publisher)
         return queryset
 
 
@@ -113,6 +120,6 @@ class AuthorView(generic.ListView):
 
     def get_queryset(self):
         author = get_object_or_404(Author,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('-published_date').filter(author=author)
+        queryset = Book.objects.order_by('published_date').filter(author=author)
         return queryset
 
