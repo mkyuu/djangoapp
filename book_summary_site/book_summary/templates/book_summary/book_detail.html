@@ -2,18 +2,20 @@
 {% block content %}
 <table>
         <tr><td><h1>{{book.title}}</h1></td>
-            <td><td><a href="{% url 'book_summary:book_update' book.pk %}">編集</a></td></td>>
-            <td><a href="{% url 'book_summary:book_delete' book.pk %}">削除</a></td></tr>
+            <td><td><a href="{% url 'book_summary:book_update' book.pk %}">編集</a></td></td>
+            <td><td><a href="{% url 'book_summary:book_delete' book.pk %}">削除</a></td></td></tr>
         <tr><td>{{book.summary|linebreaksbr}}</td></tr>
         <tr><td>著者:{{book.author}}</td></tr>
         <tr><td>出版社:{{book.publisher}}</td></tr>
-        <tr><td>カテゴリ:<a href="{% url 'book_summary:topcategory' book.category.bigcategory.topcategory.pk %}">{{book.category.bigcategory.topcategory}}</a></td>
-            <td><a href="{% url 'book_summary:bigcategory' book.category.bigcategory.pk %}">{{book.category.bigcategory}}</a></td>
-        <td><a href="{% url 'book_summary:category' book.category.pk %}">{{book.category}}</a></td></tr>
+        <tr><td>大カテゴリ:<a href="{% url 'book_summary:topcategory' book.category.bigcategory.topcategory.pk %}">{{book.category.bigcategory.topcategory}}</a></td>
+            <td>中カテゴリ:<a href="{% url 'book_summary:bigcategory' book.category.bigcategory.pk %}">{{book.category.bigcategory}}  </a></td>
+            <td><td>小カテゴリ:<a href="{% url 'book_summary:category' book.category.pk %}">{{book.category}}</a></td></td></tr>
         {% if book.link %}
         <td>Amazonへのリンク:{{book.link}}</td>
         {% endif %}
-        <td>{{book.img}}</td>
+        {% if book.img %}
+        <img src="{{book.img}}">
+        {% endif %}
         <td>{{book.published_date}}</td>
         
 </table>

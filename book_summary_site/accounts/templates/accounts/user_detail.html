@@ -17,7 +17,7 @@
         <br>
         <th>投稿した本</th>
         {% for book in user.book_set.all %}
-        <td><a href="{% url 'book_summary:book_detail' book.pk %}">{{book.title}}</a></td>
+        <tr><td><a href="{% url 'book_summary:book_detail' book.pk %}">{{book.title}}</a></td></tr>
         {% endfor %}
     </tbody>
 </table>

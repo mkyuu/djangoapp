@@ -36,12 +36,15 @@
                       <a class="nav-link" href="{% url 'book_summary:book_add' %}">本の投稿フォーム</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'accounts:user_detail' user.pk %}">マイページ</a>
+                      <a class="nav-link" href="{% url 'accounts:user_detail' user.pk %}">こんにちは！{{user.name}} さん　マイページはこちら</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a>
                     </li>
                     {% else %}
+                    <li class="nav-item">
+                      こんにちは！　ゲストさん
+                    </li>
                     <li class="nav-item">
                       <a class="nav-link" href="{% url 'accounts:user_create' %}">新規登録</a>
                     </li>

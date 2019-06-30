@@ -24,19 +24,19 @@ def set_default_publisher():
     return publisher.pk
 
 class TopCategory(models.Model):
-    name = models.CharField('トップカテゴリ名',max_length=100)
+    name = models.CharField('大カテゴリ名',max_length=100)
 
     def __str__(self):
         return self.name
 class BigCategory(models.Model):
-    name = models.CharField('カテゴリ名',max_length=100)
-    topcategory = models.ForeignKey(TopCategory,on_delete=models.SET_DEFAULT,default=set_default_topcategory,verbose_name='トップカテゴリ名')
+    name = models.CharField('中カテゴリ名',max_length=100)
+    topcategory = models.ForeignKey(TopCategory,on_delete=models.SET_DEFAULT,default=set_default_topcategory,verbose_name='大カテゴリ')
     def __str__(self):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField('ジャンル名',max_length=100)
-    bigcategory = models.ForeignKey(BigCategory,on_delete=models.SET_DEFAULT,default=set_default_bigcategory,verbose_name='カテゴリ名')
+    name = models.CharField('小カテゴリ名',max_length=100)
+    bigcategory = models.ForeignKey(BigCategory,on_delete=models.SET_DEFAULT,default=set_default_bigcategory,verbose_name='中カテゴリ')
 
     def __str__(self):
         return self.name
@@ -62,7 +62,7 @@ class Book(models.Model):
     img = models.URLField('画像url',blank=True)
     link = models.URLField('Amazonリンク',blank=True)
     published_date = models.DateTimeField('公開日',auto_now=True)
-    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT,default=set_default_category,blank=True,null=True,verbose_name='ジャンル')
+    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT,default=set_default_category,blank=True,null=True,verbose_name='小カテゴリ')
     publisher = models.ForeignKey(Publisher,on_delete=models.SET_DEFAULT,default=set_default_publisher,blank=True,verbose_name='出版社')
     author = models.ForeignKey(Author,on_delete=models.SET_DEFAULT,default=set_default_author,blank=True)
         
