@@ -7,7 +7,17 @@
 
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <style>
+        .dropdown-submenu {
+          position: relative;
+        }
+        
+        .dropdown-submenu .dropdown-menu {
+          top: 0;
+          left: 100%;
+          margin-top: -1px;
+        }
+        </style>
     <title>Book Summary Site</title>
   </head>
   <body>
@@ -49,32 +59,43 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <ul class="list-group">
-              <li class="list-group-item">ジャンル</li>
-              {% for topcategory in topcategory_list %}
-              <li class="list-group-item"><a href="{% url 'book_summary:topcategory' topcategory.pk %}">{{topcategory}}</a></li>
-              {% for bigcategory in topcategory.bigcategory_set.all %}
-              <li class="list-group-item"><a href="{% url 'book_summary:bigcategory' bigcategory.pk %}">{{bigcategory}}</a></li>
-              {% for category in bigcategory.category_set.all %}
-              <li class="list-group-item"><a href="{% url 'book_summary:category' category.pk %}">{{category}}</a></li>
-              {% endfor %}
-              {% endfor %}
-              {% endfor %}
-            </ul>
-            <ul class="list-group">
-              <li class="list-group-item">出版社</li>
-              {% for publisher in publisher_list %}
-              <li class="list-group-item"><a href="{% url 'book_summary:publisher' publisher.pk %}">{{publisher}}</a></li>
-              {% endfor %}
-            </ul>
-            <ul class="list-group">
-              <li class="list-group-item">著者</li>
-              {% for author in author_list %}
-              <li class="list-group-item"><a href="{% url 'book_summary:author' author.pk %}">{{author}}</a></li>
-              {% endfor %}
-            </ul>
+              <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    大カテゴリ
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    {% for topcategory in topcategory_list %}
+                    <li class="dropdown-submenu">
+                      <a class="test" tabindex="-1" href="{% url 'book_summary:topcategory' topcategory.pk %}">{{topcategory}} <span class="caret"></span></a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              </div>
+              <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    出版社
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    {% for publisher in publisher_list %}
+                    <li class="dropdown-submenu">
+                      <a class="test" tabindex="-1" href="{% url 'book_summary:publisher' publisher.pk %}">{{publisher}} <span class="caret"></span></a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              </div>
+              <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    著者
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    {% for author in author_list %}
+                    <li class="dropdown-submenu">
+                      <a class="test" tabindex="-1" href="{% url 'book_summary:author' author.pk %}">{{author}} <span class="caret"></span></a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              </div>
           </div>
-         
           <div class="col-md-8">
             {% block content %}
             {% endblock %}
@@ -83,7 +104,15 @@
       </div>
   
     
-            
+      <script>
+          $(document).ready(function(){
+            $('.dropdown-submenu a.test').on("click", function(e){
+              $(this).next('ul').toggle();
+              e.stopPropagation();
+              e.preventDefault();
+            });
+          });
+          </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

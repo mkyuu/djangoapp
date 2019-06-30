@@ -17,7 +17,7 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = Book.objects.order_by('published_date')
+        queryset = Book.objects.order_by('-published_date')
         keyword = self.request.GET.get('keyword')
         if keyword:
             queryset = queryset.filter(
@@ -83,6 +83,14 @@ class TopCategoryView(generic.ListView):
         topcategory = get_object_or_404(TopCategory,pk=self.kwargs['pk'])
         queryset = Book.objects.order_by('-published_date').filter(category__bigcategory__topcategory=topcategory)
         return queryset
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        topcategory = get_object_or_404(TopCategory,pk=self.kwargs['pk'])
+        context['bigcategory_list'] =  topcategory.bigcategory_set.all
+        context['topcategory'] = topcategory
+        return context
+
 
 class BigCategoryView(generic.ListView):
     model = Book
@@ -90,9 +98,15 @@ class BigCategoryView(generic.ListView):
 
     def get_queryset(self):
         bigcategory = get_object_or_404(BigCategory,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('published_date').filter(category__bigcategory=bigcategory)
+        queryset = Book.objects.order_by('-published_date').filter(category__bigcategory=bigcategory)
         return queryset
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        bigcategory = get_object_or_404(BigCategory,pk=self.kwargs['pk'])
+        context['category_list'] = bigcategory.category_set.all
+        context['bigcategory'] = bigcategory
+        return context
 
 class CategoryView(generic.ListView):
     model = Book
@@ -100,7 +114,7 @@ class CategoryView(generic.ListView):
 
     def get_queryset(self):
         category = get_object_or_404(Category,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('published_date').filter(category=category)
+        queryset = Book.objects.order_by('-published_date').filter(category=category)
         return queryset
 
 
@@ -110,7 +124,7 @@ class PublisherView(generic.ListView):
 
     def get_queryset(self):
         publisher = get_object_or_404(Publisher,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('published_date').filter(publisher=publisher)
+        queryset = Book.objects.order_by('-published_date').filter(publisher=publisher)
         return queryset
 
 
@@ -120,6 +134,6 @@ class AuthorView(generic.ListView):
 
     def get_queryset(self):
         author = get_object_or_404(Author,pk=self.kwargs['pk'])
-        queryset = Book.objects.order_by('published_date').filter(author=author)
+        queryset = Book.objects.order_by('-published_date').filter(author=author)
         return queryset
 

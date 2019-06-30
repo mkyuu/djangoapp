@@ -1,9 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if bigcategory_list %}
+<h1>{{topcategory}}</h1>
+<table>
+    <tr><td>中カテゴリ</td></tr>
+    {% for bigcategory in bigcategory_list %}
+    <tr><td><a href="{% url 'book_summary:bigcategory' bigcategory.pk %}">{{bigcategory}}</a></td></tr>
+    {% endfor %}
+</table>
+
+{% elif category_list %}
+<h1>{{bigcategory}}</h1>
+<table>
+    <tr><td>小カテゴリ</td></tr>
+    {% for category in category_list %}
+    <tr><td><a href="{% url 'book_summary:category' category.pk %}">{{category}}</a></td></tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+
 <h1>BookList</h1>
 {% for book in book_list %}
+<table>
 <tr><td><a href="{% url 'book_summary:book_detail' book.pk %}">{{book.title}}</a></td>
 </tr>
+</table>
 {% endfor %}
 
 {% include 'book_summary/page.html' %}

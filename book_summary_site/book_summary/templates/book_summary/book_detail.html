@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 <table>
-        <tr><td>{{book.title}}</td>
-            <td><a href="{% url 'book_summary:book_update' book.pk %}">編集</a></td>
+        <tr><td><h1>{{book.title}}</h1></td>
+            <td><td><a href="{% url 'book_summary:book_update' book.pk %}">編集</a></td></td>>
             <td><a href="{% url 'book_summary:book_delete' book.pk %}">削除</a></td></tr>
-        <td>{{book.summary}}</td>
-        <td>{{book.link}}</td>
+        <tr><td>{{book.summary|linebreaksbr}}</td></tr>
+        <tr><td>著者:{{book.author}}</td></tr>
+        <tr><td>出版社:{{book.publisher}}</td></tr>
+        <tr><td>カテゴリ:<a href="{% url 'book_summary:topcategory' book.category.bigcategory.topcategory.pk %}">{{book.category.bigcategory.topcategory}}</a></td>
+            <td><a href="{% url 'book_summary:bigcategory' book.category.bigcategory.pk %}">{{book.category.bigcategory}}</a></td>
+        <td><a href="{% url 'book_summary:category' book.category.pk %}">{{book.category}}</a></td></tr>
+        {% if book.link %}
+        <td>Amazonへのリンク:{{book.link}}</td>
+        {% endif %}
         <td>{{book.img}}</td>
         <td>{{book.published_date}}</td>
-        <td>{{book.author}}</td>
-        <td>{{book.publisher}}</td>
-        <tr>{{book.bigcategory}}</tr>
-        <td>{{book.category}}</td>
+        
 </table>
 <form action="{% url 'book_summary:comment' book.pk %}" method="POST">
     {{form.non_field_errors}}
